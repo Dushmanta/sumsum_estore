@@ -1,0 +1,80 @@
+{% load i18n admin_urls admin_static nimda_tags %}
+
+{% spaceless %}
+<div class="inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">
+  <h2 class="page-header">{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h2>
+  {{ inline_admin_formset.formset.management_form }}
+  {{ inline_admin_formset.formset.non_form_errors }}
+
+  {% for inline_admin_form in inline_admin_formset %}
+  <div class="inline-related{% if forloop.last %} empty-form last-related{% endif %}" id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
+      <div class="box box-solid{% if inline_admin_form.model_admin.collapsed and not inline_admin_form.errors %} collapsed-box{% endif %}">
+        <div class="box-header">
+          <h3 class="box-title">
+            <span class="inline_label">
+              {% if inline_admin_form.original %}
+                {% if inline_admin_form.original|stringformat:"s" != '' %}
+                  {{ inline_admin_form.original }}
+                {% else %}
+                  id: {{ inline_admin_form.original.pk }}
+                {% endif %}
+              {% else %}
+                New {{ inline_admin_formset.opts.verbose_name|capfirst }}
+              {% endif %}
+            </span>
+          </h3>
+          {% if inline_admin_formset.formset.can_delete and inline_admin_form.original %}
+            <span class="delete">{{ inline_admin_form.deletion_field.field }} {{ inline_admin_form.deletion_field.label_tag }}</span>
+          {% endif %}
+          <div class="box-tools">
+            {% if inline_admin_form.model_admin.collapsed and not inline_admin_form.errors %}
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+            {% else %}
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="box-body">
+          {% if inline_admin_form.form.non_field_errors %}
+            {{ inline_admin_form.form.non_field_errors }}
+          {% endif %}
+  
+          {% for fieldset in inline_admin_form %}
+            {% include "admin/includes/fieldset_inline.html" %}
+          {% endfor %}
+
+          {% if inline_admin_form.needs_explicit_pk_field %}
+            {{ inline_admin_form.pk_field.field }}
+          {% endif %}
+
+          {{ inline_admin_form.fk_field.field }}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+</div>
+{% endspaceless %}
+
+<script>
+(function() {
+  var prefix = '{{ inline_admin_formset.formset.prefix }}'
+  var formCssClass = 'dynamic-' + prefix
+  var update = function(row) {
+    var count = $("." + formCssClass).length
+    $("#id_" + prefix + "-TOTAL_FORMS").val(count)
+  }
+  var options = {
+    prefix: prefix,
+    addText: '{% blocktrans with verbose_name=inline_admin_formset.opts.verbose_name|capfirst %}Add another {{ verbose_name }}{% endblocktrans %}',
+    formCssClass: formCssClass,
+    deleteCssClass: "stacked-deletelink",
+    deleteText: '{% trans "Remove" %}',
+    removed: update,
+    added: update,
+  }
+
+  $('#' + prefix + '-group .inline-related').formset(options)
+}())
+</script>

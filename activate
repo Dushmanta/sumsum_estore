@@ -1,0 +1,4 @@
+#!/bin/bash
+
+source sumsum-env/bin/activate
+nvm use 6.10

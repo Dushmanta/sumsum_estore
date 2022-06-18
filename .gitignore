@@ -1,0 +1,13 @@
+*.swp
+*.swo
+*.swn
+.~*
+._*
+*.pyc
+.DS_Store
+.vscode
+node_modules
+*-env
+media
+**/migrations/????_*.py
+dist

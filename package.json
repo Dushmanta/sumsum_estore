@@ -1,0 +1,23 @@
+{
+  "name": "Sumsum",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sumsum/sumsum.git"
+  },
+  "author": "Mikko Hellsing",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sumsum/sumsum/issues"
+  },
+  "homepage": "http://sumsum.shop"
+}
